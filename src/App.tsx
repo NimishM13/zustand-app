@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import { useCounterStore } from './store';
 
-function App() {
+const setCount = () => {
+  const count = useCounterStore.setState({ count: 1 });
+  console.log(count);
+}
+
+const App = () => {
+  const count = useCounterStore((state) => state.count);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <App2 count={count} />
     </div>
   );
-}
+};
+
+const App2 = ({ count }: { count: number }) => {
+  useEffect(() => {
+    setCount();
+  }, [])
+  return (
+    <div className="App">
+      <button onClick={() => useCounterStore.getState().decrement()}>Decrement</button>
+      Count: {count}
+      <button onClick={() => useCounterStore.getState().increment()}>Increment</button>
+      <button onClick={() => useCounterStore.getState().incrementAsync()}>Increment Async</button>
+
+    </div>
+  );
+};
 
 export default App;
